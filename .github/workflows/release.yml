@@ -1,0 +1,78 @@
+name: Build lazygit for Debian
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: The version of lazygit to build (e.g. 0.64.0)
+        type: string
+        required: true
+      build_version:
+        description: Debian build revision (e.g. 1)
+        type: string
+        required: true
+        default: '1'
+      architecture:
+        description: Architecture to build (or 'all')
+        type: choice
+        default: 'all'
+        options:
+          - 'all'
+          - 'amd64'
+          - 'arm64'
+          - 'armel'
+          - 'armhf'
+          - 'ppc64el'
+          - 's390x'
+          - 'riscv64'
+      enable_lintian:
+        description: Enable lintian validation
+        type: boolean
+        default: true
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Build lazygit
+        uses: ranjithrajv/debian-multiarch-builder@v1
+        with:
+          config-file: 'package.yaml'
+          version: ${{ inputs.version }}
+          build-version: ${{ inputs.build_version }}
+          architecture: ${{ inputs.architecture }}
+          lintian-check: ${{ inputs.enable_lintian }}
+
+      - name: Upload packages
+        uses: actions/upload-artifact@v4
+        with:
+          name: lazygit-debian-packages
+          path: lazygit_*.deb
+          if-no-files-found: error
+
+  release:
+    name: Draft Release
+    if: github.ref == 'refs/heads/main'
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download packages
+        uses: actions/download-artifact@v4
+        with:
+          name: lazygit-debian-packages
+
+      - name: Publish draft release
+        uses: softprops/action-gh-release@v2
+        with:
+          draft: true
+          tag_name: ${{ inputs.version }}+${{ inputs.build_version }}
+          name: ${{ inputs.version }}+${{ inputs.build_version }}
+          files: lazygit_*.deb
+          fail_on_unmatched_files: true

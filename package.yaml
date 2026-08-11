@@ -1,0 +1,7 @@
+# Package definition for lazygit
+
+package_name: lazygit
+github_repo: jesseduffield/lazygit
+artifact_format: tar.gz
+
+# Build for all Debian suites and all supported architectures.

@@ -3,5 +3,6 @@
 package_name: lazygit
 github_repo: jesseduffield/lazygit
 artifact_format: tar.gz
+description: "simple terminal UI for git commands"
 
 # Build for all Debian suites and all supported architectures.

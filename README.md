@@ -1,3 +1,5 @@
+![lazygit for Debian](.github/readme-header.png)
+
 # lazygit for Debian
 
 [lazygit](https://github.com/jesseduffield/lazygit) — a simple terminal UI for
@@ -23,7 +25,9 @@ sudo dpkg -i lazygit_*.deb
 ## Supported distributions & architectures
 
 - Debian Bookworm (12), Trixie (13), Forky (14/testing), Sid (unstable)
-- amd64, arm64, armel, armhf, ppc64el, s390x, riscv64
+- amd64, arm64, i386 (bookworm/trixie)
+
+  (lazygit's upstream releases only publish amd64/arm64/32-bit Linux binaries)
 
 ## Disclaimer
 

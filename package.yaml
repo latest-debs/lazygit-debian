@@ -2,6 +2,7 @@
 
 package_name: lazygit
 github_repo: jesseduffield/lazygit
+license: MIT
 artifact_format: tar.gz
 description: "simple terminal UI for git commands"
 
